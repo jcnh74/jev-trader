@@ -39,6 +39,16 @@ All themes persist in localStorage and transition smoothly via CSS custom proper
 
 ### 3. Component Redesign
 
+#### EquityBar (NEW)
+Hero-level P&L display positioned between Header and StatsRow:
+- **Flow visualization**: Bankroll $500 → Equity $XXX.XX
+- **Clear P&L**: +$XX.XX (+X.XX%) with red/green color coding
+- **Label clarity**: "GAIN/LOSS VS $500 START" eliminates confusion
+- **Smooth animations**: AnimatedNumber with ease-out cubic (400ms)
+- **Hero typography**: 28px equity, 24px P&L USD, 16px percentage
+- **Theme aware**: Adapts to all 4 color schemes
+- **Success metric**: Instantly answers "am I up or down on the $500?"
+
 #### Header
 - Centered block counter with monospace numbers
 - Live connection pulse animation (respects prefers-reduced-motion)
@@ -113,14 +123,19 @@ Click any theme button in the header. Selection persists across sessions.
 - **Connecting/Reconnecting**: Yellow status text
 
 ### Visual Verification
-1. **Dark theme**: Should feel like a prop desk terminal
-2. **Light theme**: Clean institutional, no cartoon colors
-3. **Bloomberg**: Iconic amber aesthetic
-4. **Midnight**: Premium dark with indigo/violet accents
-5. **Animations**: At ~3.3 Hz block rate, UI should stay butter-smooth
-6. **Number stability**: Counters shouldn't jitter as values change
+1. **P&L visibility**: Can you instantly see if up or down on the $500?
+2. **Dark theme**: Should feel like a prop desk terminal
+3. **Light theme**: Clean institutional, no cartoon colors
+4. **Bloomberg**: Iconic amber aesthetic
+5. **Midnight**: Premium dark with indigo/violet accents
+6. **Animations**: At ~3.3 Hz block rate, UI should stay butter-smooth
+7. **Number stability**: Counters shouldn't jitter as values change
+8. **EquityBar**: Smooth number transitions, clear red/green P&L
 
 ## Files Changed
+- `web/src/app/page.tsx` - Integrated EquityBar
+- `web/src/components/EquityBar/*` - NEW prominent P&L display
+- `web/src/components/AnimatedNumber/*` - Smooth number transitions
 - `web/src/app/layout.tsx` - IBM Plex fonts
 - `web/src/app/globals.css` - Theme system with 4 themes
 - `web/src/app/page.module.css` - Updated layout grid
@@ -132,11 +147,10 @@ Click any theme button in the header. Selection persists across sessions.
 - `web/src/components/FlowChart/*` - Refined chart animations
 
 ## Future Enhancements
-- Implement 60-block strip in DecisionPanel (currently placeholder)
 - Add keyboard shortcuts for theme switching (T key)
 - Add chart zoom controls if requested
 - Consider additional themes (Jane Street green, Citadel blue)
-- Number roll animation for large counter changes (optional, if performance allows)
+- Consider making bankroll configurable via NEXT_PUBLIC_BANKROLL_USD env var
 
 ## Design Principles Preserved
 - One screen, no navigation
