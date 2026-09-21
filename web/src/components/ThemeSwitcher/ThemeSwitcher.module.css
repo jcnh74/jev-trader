@@ -1,0 +1,40 @@
+.switcher {
+  display: flex;
+  gap: 0;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px;
+  overflow: hidden;
+  transition: background-color 300ms ease, border-color 300ms ease;
+}
+
+.option {
+  background: transparent;
+  border: none;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 150ms ease, background-color 150ms ease;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  border-radius: 3px;
+}
+
+.option:hover {
+  color: var(--ink-2);
+  background: var(--panel-hover);
+}
+
+.option.active {
+  color: var(--ink);
+  background: var(--border-2);
+  cursor: default;
+}
+
+.option:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: -2px;
+}

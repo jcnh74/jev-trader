@@ -5,9 +5,7 @@ import type { BlockEvent } from "@/lib/types";
 import { fmtInt, fmtPrice, shortTx, txUrl } from "@/lib/format";
 import styles from "./Feed.module.css";
 
-/** Must match `.row { height }` in Feed.module.css. */
-const ROW_H = 26;
-/** Hard ceiling, so a very tall viewport does not render an absurd list. */
+const ROW_H = 28;
 const MAX_ROWS = 40;
 
 type Kind = "buy" | "sell" | "late";
@@ -32,16 +30,8 @@ const KIND_CLASS: Record<Kind, string> = {
 
 const WORD: Record<Kind, string> = { buy: "BUY", sell: "SELL", late: "LATE" };
 
-/**
- * One row per block. The word is the side the model picked, the detail is the order that went on
- * the book (bid or ask at its price), and when a taker hit one of our orders in that block the
- * detail becomes the fill instead. The tx column is the order's transaction: dim while pending,
- * "rev" if the book moved through the price before it landed.
- */
 export default function Feed({ events }: { events: BlockEvent[] }) {
   const listRef = useRef<HTMLDivElement | null>(null);
-  // How many whole 26px rows fit in the box the layout gives us. The list
-  // itself clips, so a wrong guess is never a half-drawn row, only a hidden one.
   const [capacity, setCapacity] = useState(MAX_ROWS);
 
   useEffect(() => {
@@ -64,10 +54,12 @@ export default function Feed({ events }: { events: BlockEvent[] }) {
 
   return (
     <section className={styles.feed}>
-      <div className={styles.label}>FEED</div>
+      <div className={styles.header}>
+        <span className={styles.headerLabel}>TRADE TAPE</span>
+      </div>
       <div className={styles.list} ref={listRef}>
         {rows.length === 0 ? (
-          <div className={styles.empty}>no blocks yet</div>
+          <div className={styles.empty}>No blocks yet</div>
         ) : (
           rows.map((event, i) => {
             const kind = kindOf(event);
@@ -80,8 +72,7 @@ export default function Feed({ events }: { events: BlockEvent[] }) {
             const conf =
               !decided || !decision
                 ? ""
-                : "conf " +
-                  Math.max(
+                : Math.max(
                     decision.probabilities.buy,
                     decision.probabilities.sell,
                     decision.probabilities.hold,
@@ -102,7 +93,12 @@ export default function Feed({ events }: { events: BlockEvent[] }) {
               detailMuted = true;
             }
 
-            const rowClass = [styles.row, kindClass, i === 0 ? styles.newest : "", fill ? styles.filled : ""]
+            const rowClass = [
+              styles.row,
+              kindClass,
+              i === 0 ? styles.newest : "",
+              fill ? styles.filled : "",
+            ]
               .filter(Boolean)
               .join(" ");
 
@@ -112,21 +108,25 @@ export default function Feed({ events }: { events: BlockEvent[] }) {
                 <span className={`${styles.cell} ${styles.word}`}>{WORD[kind]}</span>
                 <span className={`${styles.cell} ${styles.conf}`}>{conf}</span>
                 <span className={`${styles.cell} ${styles.lat}`}>{lat}</span>
-                <span
-                  className={`${styles.cell} ${styles.detail}${detailMuted ? ` ${styles.muted}` : ""}`}
-                >
+                <span className={`${styles.cell} ${styles.detail}${detailMuted ? ` ${styles.muted}` : ""}`}>
                   {detail}
                 </span>
                 <span className={`${styles.cell} ${styles.tx}`}>
                   {fill && !fill.simulated && fill.txHash ? (
-                    <a href={txUrl(fill.txHash)} target="_blank" rel="noreferrer" title="the taker's transaction">
+                    <a href={txUrl(fill.txHash)} target="_blank" rel="noreferrer" title="Taker's transaction">
                       {shortTx(fill.txHash)}
                     </a>
                   ) : quote && quote.status === "sim" ? (
                     <span className={styles.muted}>sim</span>
                   ) : quote && quote.txHash ? (
                     <a
-                      className={quote.status === "sent" ? styles.pending : quote.status === "placed" ? undefined : styles.muted}
+                      className={
+                        quote.status === "sent"
+                          ? styles.pending
+                          : quote.status === "placed"
+                            ? undefined
+                            : styles.muted
+                      }
                       title={quote.status}
                       href={txUrl(quote.txHash)}
                       target="_blank"

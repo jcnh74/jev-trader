@@ -5,7 +5,7 @@ import type { BlockEvent, Meta } from "@/lib/types";
 import { fmtInt, uptime } from "@/lib/format";
 import styles from "./StatsRow.module.css";
 
-const DASH = "-";
+const DASH = "–";
 
 export default function StatsRow({
   latest,
@@ -17,7 +17,6 @@ export default function StatsRow({
   meta: Meta | null;
 }) {
   const startedAt = meta?.startedAt ?? null;
-  // Ticks once a second; starts on the client so SSR and hydration agree.
   const [up, setUp] = useState<string | null>(null);
 
   useEffect(() => {
@@ -32,19 +31,38 @@ export default function StatsRow({
   }, [startedAt]);
 
   const decision = latest?.decision ?? null;
-  const last = decision && !decision.late ? `${decision.latencyMs} ms` : `${DASH} ms`;
-  const avg =
-    Number.isFinite(avgLatencyMs) && avgLatencyMs > 0 ? `${Math.round(avgLatencyMs)}ms` : DASH;
+  const last = decision && !decision.late ? `${decision.latencyMs}` : DASH;
+  const avg = Number.isFinite(avgLatencyMs) && avgLatencyMs > 0 ? `${Math.round(avgLatencyMs)}` : DASH;
   const totals = latest?.totals ?? null;
 
   return (
     <div className={styles.stats}>
-      <span>last {last}</span>
-      <span>avg {avg}</span>
-      <span className={styles.nowrap}>{totals ? fmtInt(totals.decisions) : DASH} calls</span>
-      <span className={styles.nowrap}>{totals ? fmtInt(totals.fills) : DASH} fills</span>
-      <span className={styles.spacer} />
-      <span>uptime {up ?? "00:00:00"}</span>
+      <div className={styles.metric}>
+        <span className={styles.label}>LAST</span>
+        <span className={styles.value}>{last}<span className={styles.unit}>ms</span></span>
+      </div>
+
+      <div className={styles.metric}>
+        <span className={styles.label}>AVG</span>
+        <span className={styles.value}>{avg}<span className={styles.unit}>ms</span></span>
+      </div>
+
+      <div className={styles.metric}>
+        <span className={styles.label}>CALLS</span>
+        <span className={styles.value}>{totals ? fmtInt(totals.decisions) : DASH}</span>
+      </div>
+
+      <div className={styles.metric}>
+        <span className={styles.label}>FILLS</span>
+        <span className={styles.value}>{totals ? fmtInt(totals.fills) : DASH}</span>
+      </div>
+
+      <div className={styles.spacer} />
+
+      <div className={styles.metric}>
+        <span className={styles.label}>UPTIME</span>
+        <span className={styles.value}>{up ?? "00:00:00"}</span>
+      </div>
     </div>
   );
 }

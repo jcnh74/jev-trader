@@ -1,113 +1,199 @@
 .panel {
-  flex: none;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  overflow: hidden;
+  transition: background-color 300ms ease, border-color 300ms ease;
 }
 
 .section {
-  padding: 18px;
-  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .sectionLabel {
-  font-family: var(--font-sans), Inter, system-ui, sans-serif;
-  font-weight: 500;
-  font-size: 11px;
-  line-height: 1.2;
-  letter-spacing: 0.1em;
-  color: var(--muted-2);
+  font-size: 9px;
+  color: var(--label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  transition: color 300ms ease;
 }
-
-.sectionLabelGap {
-  margin-bottom: 10px;
-}
-
-/* ---- (1) standing order ---- */
 
 .order {
-  margin-top: 6px;
-  font-family: var(--font-mono), "Geist Mono", ui-monospace, monospace;
-  font-weight: 400;
-  font-size: 12.5px;
-  line-height: 1.45;
-  color: var(--ink-2);
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  transition: color 300ms ease;
 }
-
-/* ---- (2) the decision: headline + bars ---- */
 
 .headline {
   display: flex;
   align-items: baseline;
-  gap: 14px;
-  margin-bottom: 14px;
-  transition: color 0.3s;
+  gap: 10px;
+  margin: 6px 0;
+  animation: flicker 300ms ease;
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 0.7;
+    transform: translateX(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .headlineWord {
-  font-family: var(--font-sans), Inter, system-ui, sans-serif;
-  font-weight: 600;
+  font-family: var(--font-mono), monospace;
   font-size: 28px;
-  line-height: 1.1;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: color 300ms ease;
 }
 
 .headlinePct {
-  font-family: var(--font-mono), "Geist Mono", ui-monospace, monospace;
+  font-family: var(--font-mono), monospace;
+  font-size: 18px;
   font-weight: 500;
-  font-size: 20px;
-  line-height: 1.1;
-  font-variant-numeric: tabular-nums;
+  opacity: 0.7;
+  transition: color 300ms ease, opacity 300ms ease;
+}
+
+.headlineBuy {
+  color: var(--buy-ink);
+}
+
+.headlineSell {
+  color: var(--sell-ink);
+}
+
+.headlineLate {
+  color: var(--late-ink);
+}
+
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .row {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 4px 0;
+  gap: 10px;
+  transition: opacity 200ms ease;
+}
+
+.row:not(.active) {
+  opacity: 0.4;
 }
 
 .label {
-  width: 44px;
-  flex: none;
-  display: inline-block;
-  font-family: var(--font-sans), Inter, system-ui, sans-serif;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 1.2;
-  transition: opacity 0.3s;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+  width: 36px;
+  text-align: right;
+  transition: color 300ms ease;
 }
 
 .track {
   flex: 1;
-  min-width: 0;
-  height: 16px;
-  border-radius: 99px;
+  height: 20px;
   background: var(--track);
+  border-radius: 3px;
   overflow: hidden;
+  position: relative;
+  transition: background-color 300ms ease;
 }
 
 .fill {
   height: 100%;
-  border-radius: 99px;
-  transition: width 0.25s linear, background 0.25s;
+  border-radius: 3px;
+  transition: width 250ms cubic-bezier(0.4, 0, 0.2, 1), background-color 300ms ease;
+}
+
+.fillBuy {
+  background: var(--buy-bar);
+  box-shadow: 0 0 10px var(--glow-buy);
+}
+
+.fillSell {
+  background: var(--sell-bar);
+  box-shadow: 0 0 10px var(--glow-sell);
 }
 
 .pct {
-  width: 46px;
-  flex: none;
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  min-width: 36px;
   text-align: right;
-  font-family: var(--font-mono), "Geist Mono", ui-monospace, monospace;
-  font-weight: 500;
-  font-size: 15px;
-  line-height: 1.2;
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
+  transition: color 300ms ease;
+}
+
+.blockStrip {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.stripLabel {
+  font-size: 9px;
+  color: var(--label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  transition: color 300ms ease;
+}
+
+.cells {
+  display: flex;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.cell {
+  width: 4px;
+  height: 16px;
+  background: var(--hold-cell);
+  border-radius: 2px;
+  transition: background-color 300ms ease;
+}
+
+@media (max-width: 600px) {
+  .panel {
+    padding: 14px;
+    gap: 16px;
+  }
+
+  .headlineWord {
+    font-size: 24px;
+  }
+
+  .headlinePct {
+    font-size: 16px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .headline,
-  .label,
+  .headline {
+    animation: none;
+  }
+  
   .fill {
-    transition: none;
+    transition: width 0ms, background-color 0ms;
   }
 }

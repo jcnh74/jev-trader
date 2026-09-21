@@ -1,58 +1,214 @@
-/* ---- Jev Trader design tokens (5e "Eleven", warm-neutral light system) ---- */
-:root {
+/* ---- Jev Trader institutional theme system ---- */
+
+/* Dark theme (default) - trading desk primary */
+:root,
+[data-theme="dark"] {
   /* surfaces */
-  --bg: #FFFFFF;
-  --panel: #F5F4F1;
-  --border: #ECECEA;
-  --border-2: #E5E4DF;
-  --track: #F1F0EC;
+  --bg: #0A0B0F;
+  --panel: #13151C;
+  --panel-hover: #1A1D27;
+  --border: #1F2330;
+  --border-2: #2A2F40;
+  --track: #1A1D27;
 
   /* ink */
-  --ink: #0A0A0A;
-  --ink-2: #3C3C38;
-  --muted: #77776F;
-  --muted-2: #98968E;
-  --link-muted: #5A5A56;
+  --ink: #E8E9ED;
+  --ink-2: #B8BBC6;
+  --muted: #70748A;
+  --muted-2: #50556E;
+  --label: #9095AE;
 
   /* sides */
-  --buy: #0FA968;
-  --buy-ink: #0B7A48;
-  --buy-bar: #34C382;
-  --buy-bar-dim: #D9EEE3;
-  --sell: #E4573D;
-  --sell-ink: #C2402F;
-  --sell-bar: #F07860;
-  --sell-bar-dim: #F9DED6;
+  --buy: #10B981;
+  --buy-ink: #34D399;
+  --buy-bar: #059669;
+  --buy-bar-dim: #064E3B;
+  --sell: #EF4444;
+  --sell-ink: #F87171;
+  --sell-bar: #DC2626;
+  --sell-bar-dim: #7F1D1D;
 
-  /* block cells + horizon bars */
-  --late: #C98A1B;
-  --late-ink: #A16207;
-  --late-cell: #F2C063;
-  --hold-cell: #E3E1DA;
-  --up-bar: #8FCDAB;
-  --down-bar: #EBAB9E;
-  --link: #7B6ED9;
+  /* block cells + indicators */
+  --late: #F59E0B;
+  --late-ink: #FBBF24;
+  --late-cell: #D97706;
+  --hold-cell: #374151;
+  --up-bar: #10B981;
+  --down-bar: #EF4444;
+  --link: #818CF8;
 
   /* chrome */
-  --badge-jev-bg: #EBE7FC;
-  --badge-jev-fg: #4C3EBB;
-  --badge-standin-bg: #FBEED3;
-  --badge-standin-fg: #8A5B0E;
-  --live-dot: #4ADE80;
-  --pnl-pos: #0E9F5D;
-  --pnl-neg: #DE3B32;
-
-  /* fonts (set by next/font in layout.tsx) */
-  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --badge-jev-bg: #312E81;
+  --badge-jev-fg: #A5B4FC;
+  --badge-standin-bg: #78350F;
+  --badge-standin-fg: #FCD34D;
+  --live-dot: #10B981;
+  --pnl-pos: #10B981;
+  --pnl-neg: #EF4444;
 
   /* page */
-  --page-bg: #F0EEE9;
-  --card-radius: 18px;
-  --card-max: 1400px;
+  --page-bg: #000000;
+  --card-radius: 0;
+  --card-max: 1600px;
+
+  /* shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  --glow-buy: rgba(16, 185, 129, 0.2);
+  --glow-sell: rgba(239, 68, 68, 0.2);
 }
 
-/* ---- base reset ---- */
+/* Light theme - institutional clean */
+[data-theme="light"] {
+  --bg: #FFFFFF;
+  --panel: #F8F9FA;
+  --panel-hover: #F1F3F5;
+  --border: #E5E7EB;
+  --border-2: #D1D5DB;
+  --track: #F3F4F6;
+
+  --ink: #111827;
+  --ink-2: #374151;
+  --muted: #6B7280;
+  --muted-2: #9CA3AF;
+  --label: #4B5563;
+
+  --buy: #059669;
+  --buy-ink: #047857;
+  --buy-bar: #10B981;
+  --buy-bar-dim: #D1FAE5;
+  --sell: #DC2626;
+  --sell-ink: #B91C1C;
+  --sell-bar: #EF4444;
+  --sell-bar-dim: #FEE2E2;
+
+  --late: #D97706;
+  --late-ink: #B45309;
+  --late-cell: #F59E0B;
+  --hold-cell: #E5E7EB;
+  --up-bar: #10B981;
+  --down-bar: #EF4444;
+  --link: #4F46E5;
+
+  --badge-jev-bg: #EEF2FF;
+  --badge-jev-fg: #4338CA;
+  --badge-standin-bg: #FEF3C7;
+  --badge-standin-fg: #92400E;
+  --live-dot: #10B981;
+  --pnl-pos: #059669;
+  --pnl-neg: #DC2626;
+
+  --page-bg: #F9FAFB;
+  --card-radius: 0;
+  --card-max: 1600px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --glow-buy: rgba(16, 185, 129, 0.15);
+  --glow-sell: rgba(239, 68, 68, 0.15);
+}
+
+/* Bloomberg Amber terminal theme */
+[data-theme="bloomberg"] {
+  --bg: #1A1400;
+  --panel: #241C00;
+  --panel-hover: #2E2400;
+  --border: #3D3000;
+  --border-2: #4D3C00;
+  --track: #2E2400;
+
+  --ink: #FFAA00;
+  --ink-2: #E69500;
+  --muted: #996600;
+  --muted-2: #735000;
+  --label: #BF8000;
+
+  --buy: #00FF00;
+  --buy-ink: #33FF33;
+  --buy-bar: #00CC00;
+  --buy-bar-dim: #004400;
+  --sell: #FF3300;
+  --sell-ink: #FF6633;
+  --sell-bar: #CC2200;
+  --sell-bar-dim: #440000;
+
+  --late: #FFAA00;
+  --late-ink: #FFCC33;
+  --late-cell: #CC8800;
+  --hold-cell: #3D3000;
+  --up-bar: #00FF00;
+  --down-bar: #FF3300;
+  --link: #00CCFF;
+
+  --badge-jev-bg: #2E2400;
+  --badge-jev-fg: #FFAA00;
+  --badge-standin-bg: #3D3000;
+  --badge-standin-fg: #FFCC33;
+  --live-dot: #00FF00;
+  --pnl-pos: #00FF00;
+  --pnl-neg: #FF3300;
+
+  --page-bg: #0F0A00;
+  --card-radius: 0;
+  --card-max: 1600px;
+
+  --shadow-sm: 0 1px 2px rgba(255, 170, 0, 0.1);
+  --shadow: 0 2px 8px rgba(255, 170, 0, 0.15);
+  --glow-buy: rgba(0, 255, 0, 0.2);
+  --glow-sell: rgba(255, 51, 0, 0.2);
+}
+
+/* Midnight Indigo theme - premium dark */
+[data-theme="midnight"] {
+  --bg: #0F0F1E;
+  --panel: #181828;
+  --panel-hover: #22223A;
+  --border: #2D2D4A;
+  --border-2: #3A3A5C;
+  --track: #1C1C30;
+
+  --ink: #E0E7FF;
+  --ink-2: #C7D2FE;
+  --muted: #818CF8;
+  --muted-2: #6366F1;
+  --label: #A5B4FC;
+
+  --buy: #34D399;
+  --buy-ink: #6EE7B7;
+  --buy-bar: #10B981;
+  --buy-bar-dim: #064E3B;
+  --sell: #F472B6;
+  --sell-ink: #F9A8D4;
+  --sell-bar: #EC4899;
+  --sell-bar-dim: #831843;
+
+  --late: #FBBF24;
+  --late-ink: #FCD34D;
+  --late-cell: #F59E0B;
+  --hold-cell: #3A3A5C;
+  --up-bar: #34D399;
+  --down-bar: #F472B6;
+  --link: #A5B4FC;
+
+  --badge-jev-bg: #312E81;
+  --badge-jev-fg: #C7D2FE;
+  --badge-standin-bg: #78350F;
+  --badge-standin-fg: #FCD34D;
+  --live-dot: #34D399;
+  --pnl-pos: #34D399;
+  --pnl-neg: #F472B6;
+
+  --page-bg: #050510;
+  --card-radius: 0;
+  --card-max: 1600px;
+
+  --shadow-sm: 0 1px 2px rgba(99, 102, 241, 0.1);
+  --shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+  --glow-buy: rgba(52, 211, 153, 0.2);
+  --glow-sell: rgba(244, 114, 182, 0.2);
+}
+
+/* ---- Base reset ---- */
 *,
 *::before,
 *::after {
@@ -67,16 +223,20 @@ body {
 
 html {
   -webkit-text-size-adjust: 100%;
+  color-scheme: dark;
 }
 
 body {
   background: var(--page-bg);
   color: var(--ink);
-  font-family: var(--font-sans);
-  font-size: 14px;
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  transition: background-color 300ms ease, color 300ms ease;
 }
 
 h1,
@@ -94,6 +254,11 @@ dd {
 a {
   color: inherit;
   text-decoration: none;
+  transition: opacity 150ms ease;
+}
+
+a:hover {
+  opacity: 0.7;
 }
 
 button,
@@ -110,37 +275,31 @@ svg {
   max-width: 100%;
 }
 
-/* ---- the card: the design's 1400px white slab, centered on the warm page ----
-   Desktop (>= 900px): the card is exactly the viewport minus its 16px margins
-   and is a flex column, so header + stats take their natural height and the
-   main row absorbs the rest. Nothing can overflow -> no page scrollbar.
-   Below 900px the card is auto-height and the page scrolls normally. */
+/* ---- The card ---- */
 .card {
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--card-radius);
-  /* 16px side gutters at every width, centered, never wider than 1400px */
-  max-width: min(var(--card-max), calc(100% - 32px));
-  margin: 16px auto;
+  max-width: min(var(--card-max), calc(100% - 16px));
+  margin: 8px auto;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  /* breathing room under the main row (there is no footer any more) */
-  padding-bottom: 16px;
+  box-shadow: var(--shadow);
+  transition: background-color 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
 }
 
 @media (min-width: 900px) {
-  /* the card already fills the viewport; never let the document scroll */
   body {
     overflow: hidden;
   }
 
   .card {
-    /* 16px margin top + 16px bottom; border-box keeps the 1px borders inside */
-    height: calc(100vh - 32px);
+    height: calc(100vh - 16px);
+    max-width: min(var(--card-max), calc(100% - 32px));
+    margin: 8px auto;
   }
 }
-
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -151,5 +310,9 @@ svg {
     transition-duration: 0.001ms !important;
     transition-delay: 0ms !important;
     scroll-behavior: auto !important;
+  }
+  
+  body {
+    transition: none !important;
   }
 }
