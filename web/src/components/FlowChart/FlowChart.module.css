@@ -1,217 +1,20 @@
-/* FlowChart: the hero. A calm, responsive price flow drawn by hand in SVG. */
-
 .wrap {
+  position: relative;
   width: 100%;
   height: 100%;
-  min-height: 0;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
+  overflow: hidden;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  transition: background-color 300ms ease, border-color 300ms ease;
 }
 
 .panel {
   position: relative;
-  flex: 1;
-  min-height: 0;
-  background: var(--panel);
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-.svg {
-  position: absolute;
-  inset: 0;
-  display: block;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
-
-/* the sliding group: exactly one 10px step left per block */
-.slide {
-  transition: transform 0.3s linear;
-}
-
-.line {
-  fill: none;
-  stroke: var(--ink);
-  stroke-width: 1.6;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-}
-
-.grid {
-  stroke: #efede8;
-  stroke-width: 1;
-}
-
-.tick {
-  font: 400 10px var(--font-mono), monospace;
-  fill: var(--muted-2);
-  font-variant-numeric: tabular-nums;
-}
-
-/* last-price tag: tracks the line end vertically */
-.tag {
-  transition: transform 0.3s linear;
-}
-
-.tagText {
-  font: 500 11px var(--font-mono), monospace;
-  font-variant-numeric: tabular-nums;
-  fill: #fff;
-}
-
-.guide {
-  stroke: var(--muted-2);
-  stroke-width: 1;
-  stroke-dasharray: 1 3;
-  stroke-linecap: round;
-  opacity: 0.7;
-}
-
-/* soft halo behind the end dot (transform/opacity only) */
-.halo {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: halo 2.2s ease-out infinite;
-  pointer-events: none;
-}
-
-@keyframes halo {
-  0% { transform: scale(1); opacity: 0.3; }
-  70%, 100% { transform: scale(3); opacity: 0; }
-}
-
-/* hover crosshair */
-.cross {
-  stroke: var(--ink);
-  stroke-width: 1;
-  opacity: 0.18;
-}
-
-.crossDot {
-  fill: var(--bg);
-  stroke: var(--ink);
-  stroke-width: 1.6;
-}
-
-.tip {
-  fill: var(--bg);
-  stroke: var(--border-2);
-  stroke-width: 1;
-}
-
-.tipBlock {
-  font: 400 10px var(--font-mono), monospace;
-  font-variant-numeric: tabular-nums;
-  fill: var(--muted);
-}
-
-.tipPrice {
-  font: 500 14px var(--font-mono), monospace;
-  font-variant-numeric: tabular-nums;
-  fill: var(--ink);
-}
-
-.tipSide {
-  font: 500 11px var(--font-sans), sans-serif;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
-}
-
-.tipMeta {
-  font: 400 10px var(--font-mono), monospace;
-  font-variant-numeric: tabular-nums;
-  fill: var(--muted-2);
-}
-
-.fade {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 64px;
-  background: linear-gradient(90deg, var(--panel), transparent);
-  pointer-events: none;
-}
-
-.tl {
-  position: absolute;
-  top: 18px;
-  left: 22px;
-  pointer-events: none;
-}
-
-.tr {
-  position: absolute;
-  top: 18px;
-  right: 22px;
-  text-align: right;
-  pointer-events: none;
-}
-
-.price {
-  font: 500 34px var(--font-mono), monospace;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
-  line-height: 1.1;
-  animation: fadeIn 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0.45; }
-  to { opacity: 1; }
-}
-
-.sub {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 12px;
-  margin-top: 6px;
-  font: 400 12px var(--font-sans), sans-serif;
-  font-variant-numeric: tabular-nums;
-  color: var(--muted);
-  white-space: nowrap;
-}
-
-.tr .sub {
-  justify-content: flex-end;
-}
-
-.word {
-  font: 300 30px var(--font-sans), sans-serif;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  transition: color 0.3s;
-  white-space: nowrap;
-}
-
-/* one-shot trade cues: every animated node is keyed by block, so it plays once on mount */
-.ripple, .beadPop, .cellPop, .cellGlow {
-  transform-box: fill-box;
-  transform-origin: center;
-  pointer-events: none;
-}
-
-.ripple { vector-effect: non-scaling-stroke; animation: ripple 0.7s ease-out forwards; }
-@keyframes ripple { from { transform: scale(1); opacity: 0.9; } to { transform: scale(5.3); opacity: 0; } }
-
-.beadPop { animation: beadPop 0.3s ease-out; }
-@keyframes beadPop { from { transform: scale(1.8); } to { transform: scale(1); } }
-
-/* riser: joins the new strip cell to its bead on the line */
-.riser { stroke-width: 1; pointer-events: none; animation: riser 0.9s ease-out forwards; }
-@keyframes riser { from { opacity: 0.35; } to { opacity: 0; } }
-
-.cellPop { animation: cellPop 0.25s ease-out; }
-@keyframes cellPop { from { transform: scale(1.6); } to { transform: scale(1); } }
-
-.cellGlow { animation: cellGlow 0.6s ease-out forwards; }
-@keyframes cellGlow { from { transform: scale(1.4); opacity: 0.35; } to { transform: scale(2.3); opacity: 0; } }
-
-.wordPop { transform-origin: right center; animation: wordPop 0.25s ease-out; }
-@keyframes wordPop { from { transform: scale(1.06); } to { transform: scale(1); } }
 
 .empty {
   position: absolute;
@@ -219,30 +22,349 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font: 400 13px var(--font-sans), sans-serif;
-  color: var(--muted-2);
+  color: var(--muted);
+  font-size: 13px;
+  transition: color 300ms ease;
+}
+
+.svg {
+  display: block;
+  overflow: visible;
+}
+
+.grid {
+  stroke: var(--border);
+  stroke-width: 1;
+  opacity: 0.5;
+  transition: stroke 300ms ease;
+}
+
+.slide {
+  transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.line {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.8;
+  transition: stroke 300ms ease;
+}
+
+.riser {
+  stroke-width: 1.5;
+  opacity: 0.3;
+  transition: stroke 300ms ease;
+}
+
+.ripple {
+  stroke-width: 2;
+  opacity: 0;
+  animation: ripple 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes ripple {
+  0% {
+    r: 3;
+    opacity: 0.8;
+  }
+  100% {
+    r: 14;
+    opacity: 0;
+  }
+}
+
+.beadPop {
+  animation: beadPop 250ms ease;
+}
+
+@keyframes beadPop {
+  0% {
+    r: 3;
+    opacity: 0;
+  }
+  50% {
+    r: 5;
+    opacity: 0.9;
+  }
+  100% {
+    r: 3;
+    opacity: 0.7;
+  }
+}
+
+.cellGlow {
+  opacity: 0;
+  filter: blur(2px);
+  animation: cellGlow 300ms ease;
+}
+
+@keyframes cellGlow {
+  0% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.cellPop {
+  animation: cellPop 250ms ease;
+}
+
+@keyframes cellPop {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cross {
+  stroke: var(--ink-2);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  opacity: 0.5;
+  transition: stroke 300ms ease;
+}
+
+.crossDot {
+  fill: var(--ink);
+  stroke: var(--bg);
+  stroke-width: 2;
+  transition: fill 300ms ease, stroke 300ms ease;
+}
+
+.tip {
+  fill: var(--bg);
+  stroke: var(--border-2);
+  stroke-width: 1;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  transition: fill 300ms ease, stroke 300ms ease;
+}
+
+.tipBlock,
+.tipPrice,
+.tipSide,
+.tipMeta {
+  font-family: var(--font-mono), monospace;
+  fill: var(--ink);
+  transition: fill 300ms ease;
+}
+
+.tipBlock {
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+.tipPrice {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.tipSide {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.tipMeta {
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+.tick {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  fill: var(--muted);
+  font-weight: 500;
+  transition: fill 300ms ease;
+}
+
+.tag {
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.guide {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+  opacity: 0.3;
+  transition: stroke 300ms ease;
+}
+
+.halo {
+  opacity: 0;
+  animation: halo 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes halo {
+  0%, 100% {
+    r: 4;
+    opacity: 0;
+  }
+  50% {
+    r: 8;
+    opacity: 0.2;
+  }
+}
+
+.tagText {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--bg);
+  transition: fill 300ms ease;
+}
+
+.fade {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 120px;
+  background: linear-gradient(to right, transparent, var(--panel));
+  pointer-events: none;
+  transition: background 300ms ease;
+}
+
+.tl,
+.tr {
+  position: absolute;
+  pointer-events: none;
+}
+
+.tl {
+  top: 16px;
+  left: 20px;
+}
+
+.tr {
+  top: 16px;
+  right: 20px;
+  text-align: right;
+}
+
+.price {
+  font-family: var(--font-mono), monospace;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  transition: color 300ms ease;
+  animation: fadeIn 300ms ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sub {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--muted);
+  transition: color 300ms ease;
+}
+
+.word {
+  font-family: var(--font-mono), monospace;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: color 300ms ease;
+}
+
+.wordPop {
+  animation: wordPop 250ms ease;
+}
+
+@keyframes wordPop {
+  0% {
+    opacity: 0.5;
+    transform: translateX(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .tl,
+  .tr {
+    top: 12px;
+  }
+
+  .tl {
+    left: 16px;
+  }
+
+  .tr {
+    right: 16px;
+  }
+
+  .price {
+    font-size: 28px;
+  }
+
+  .word {
+    font-size: 18px;
+  }
+
+  .sub {
+    font-size: 10px;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .price {
+    font-size: 24px;
+  }
+
+  .word {
+    font-size: 16px;
+  }
+
+  .sub {
+    font-size: 9px;
+    gap: 8px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .slide,
-  .tag,
-  .word {
+  .tag {
     transition: none;
   }
-  .halo,
-  .price,
+
   .ripple,
+  .halo,
   .beadPop,
-  .riser,
-  .cellPop,
   .cellGlow,
+  .cellPop,
+  .price,
   .wordPop {
     animation: none;
-  }
-  .halo,
-  .ripple,
-  .riser,
-  .cellGlow {
-    opacity: 0;
   }
 }

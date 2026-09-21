@@ -12,33 +12,21 @@ type Chosen = "buy" | "sell" | null;
 
 interface BarRowProps {
   label: string;
-  /** css color for the label text */
-  labelColor: string;
-  /** dims the label to .38 when false */
   active: boolean;
-  /** 0..1, fill width as a fraction of the track */
   value: number;
-  /** css background for the fill */
-  fill: string;
-  /** right-hand percentage text ("62%" or "-") */
   pct: string;
+  side: "buy" | "sell";
 }
 
-function BarRow({ label, labelColor, active, value, fill, pct }: BarRowProps) {
+function BarRow({ label, active, value, pct, side }: BarRowProps) {
   return (
-    <div className={styles.row}>
-      <span
-        className={styles.label}
-        style={{ color: labelColor, opacity: active ? 1 : 0.38 }}
-      >
-        {label}
-      </span>
+    <div className={`${styles.row} ${active ? styles.active : ""}`}>
+      <span className={styles.label}>{label}</span>
       <div className={styles.track}>
         <div
-          className={styles.fill}
+          className={`${styles.fill} ${side === "buy" ? styles.fillBuy : styles.fillSell}`}
           style={{
             width: `${Math.max(0, Math.min(1, value)) * 100}%`,
-            background: fill,
           }}
         />
       </div>
@@ -50,22 +38,19 @@ function BarRow({ label, labelColor, active, value, fill, pct }: BarRowProps) {
 export default function DecisionPanel({ latest }: DecisionPanelProps) {
   const decision = latest?.decision ?? null;
   const late = decision ? decision.late : true;
-  // "hold" is treated as a non-decision, exactly as the feed does.
   const chosen: Chosen =
-    decision && !decision.late && decision.action !== "hold"
-      ? decision.action
-      : null;
+    decision && !decision.late && decision.action !== "hold" ? decision.action : null;
 
   const probs = decision?.probabilities ?? { buy: 0, sell: 0, hold: 0 };
   const decided = decision !== null && !late && chosen !== null;
-  const pctOf = (p: number) => (decided ? fmtPct(p) : "-");
+  const pctOf = (p: number) => (decided ? fmtPct(p) : "–");
 
   const headline = chosen ? (chosen === "buy" ? "BUY" : "SELL") : "LATE";
-  const headlineColor = chosen
+  const headlineClass = chosen
     ? chosen === "buy"
-      ? "var(--buy-ink)"
-      : "var(--sell-ink)"
-    : "var(--late-ink)";
+      ? styles.headlineBuy
+      : styles.headlineSell
+    : styles.headlineLate;
   const headlinePct = chosen ? fmtPct(probs[chosen]) : "";
 
   return (
@@ -73,38 +58,32 @@ export default function DecisionPanel({ latest }: DecisionPanelProps) {
       <section className={styles.section}>
         <div className={styles.sectionLabel}>STANDING ORDER</div>
         <div className={styles.order}>
-          {"> post a bid or an ask on Kuru's MON/USDC book. every block. no abstaining."}
+          Post a bid or an ask on Kuru's MON/USDC book. Every block. No abstaining.
         </div>
       </section>
 
       <section className={styles.section}>
-        <div className={`${styles.sectionLabel} ${styles.sectionLabelGap}`}>
-          WHICH SIDE THIS BLOCK?
-        </div>
+        <div className={styles.sectionLabel}>WHICH SIDE THIS BLOCK?</div>
 
-        <div className={styles.headline} style={{ color: headlineColor }}>
+        <div className={`${styles.headline} ${headlineClass}`} key={`${latest?.block}-${headline}`}>
           <span className={styles.headlineWord}>{headline}</span>
-          {headlinePct ? (
-            <span className={styles.headlinePct}>{headlinePct}</span>
-          ) : null}
+          {headlinePct ? <span className={styles.headlinePct}>{headlinePct}</span> : null}
         </div>
 
-        <BarRow
-          label="buy"
-          labelColor="var(--buy-ink)"
-          active={chosen === "buy"}
-          value={probs.buy}
-          fill={chosen === "buy" ? "var(--buy-bar)" : "var(--buy-bar-dim)"}
-          pct={pctOf(probs.buy)}
-        />
-        <BarRow
-          label="sell"
-          labelColor="var(--sell-ink)"
-          active={chosen === "sell"}
-          value={probs.sell}
-          fill={chosen === "sell" ? "var(--sell-bar)" : "var(--sell-bar-dim)"}
-          pct={pctOf(probs.sell)}
-        />
+        <div className={styles.bars}>
+          <BarRow label="BUY" active={chosen === "buy"} value={probs.buy} pct={pctOf(probs.buy)} side="buy" />
+          <BarRow label="SELL" active={chosen === "sell"} value={probs.sell} pct={pctOf(probs.sell)} side="sell" />
+        </div>
+      </section>
+
+      <section className={styles.blockStrip}>
+        <div className={styles.stripLabel}>LAST 60 BLOCKS</div>
+        <div className={styles.cells}>
+          {/* The chart component will inject a 60-cell strip here or we render placeholder */}
+          {Array.from({ length: 60 }, (_, i) => (
+            <div key={i} className={styles.cell} />
+          ))}
+        </div>
       </section>
     </div>
   );

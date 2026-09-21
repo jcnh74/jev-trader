@@ -1,71 +1,74 @@
-/* The feed is the flexible child of the right column: it takes whatever the
-   decision panel leaves and clips. Rows are a fixed 26px so the number that
-   fits is exactly floor(listHeight / 26) (see ROW_H in Feed.tsx). */
-
 .feed {
   display: flex;
   flex-direction: column;
-  min-width: 0;
-  min-height: 0;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
   overflow: hidden;
-  padding-top: 14px;
+  height: 100%;
+  transition: background-color 300ms ease, border-color 300ms ease;
 }
 
-.label {
-  flex: none;
-  font-family: var(--font-sans), Inter, sans-serif;
-  font-weight: 500;
-  font-size: 11px;
-  line-height: 1.2;
-  letter-spacing: 0.1em;
-  color: var(--muted-2);
-  padding: 0 18px 8px;
+.header {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  flex-shrink: 0;
+  transition: background-color 300ms ease, border-color 300ms ease;
+}
+
+.headerLabel {
+  font-size: 9px;
+  color: var(--label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  transition: color 300ms ease;
 }
 
 .list {
-  position: relative;
   flex: 1;
-  min-height: 0;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
 }
 
-/* Safety net: if the measured row count is ever off (no ResizeObserver, a
-   mid-resize frame), the bottom of the clipped row fades out instead of
-   being sliced in half. */
-.list::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 14px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--bg));
-  pointer-events: none;
-}
-
-/* one line, fixed height, never wraps, never overflows */
-.row {
-  flex: none;
-  height: 26px;
+.empty {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 0 18px;
-  white-space: nowrap;
-  overflow: hidden;
-  font-family: var(--font-mono), "Geist Mono", monospace;
-  font-weight: 400;
-  font-size: 11.5px;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-  background: transparent;
-  transition: background 0.5s;
-  animation: feedRowIn 0.25s ease-out both;
+  justify-content: center;
+  height: 100%;
+  color: var(--muted);
+  font-size: 12px;
+  transition: color 300ms ease;
 }
 
-@keyframes feedRowIn {
+.row {
+  display: grid;
+  grid-template-columns: 90px 44px 44px 50px 1fr 70px;
+  gap: 10px;
+  align-items: center;
+  height: 28px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  transition: background-color 150ms ease, border-color 300ms ease, opacity 200ms ease;
+  opacity: 0.7;
+}
+
+.row:hover {
+  background: var(--panel-hover);
+  opacity: 1;
+}
+
+.row.newest {
+  opacity: 1;
+  animation: slideIn 250ms ease;
+}
+
+@keyframes slideIn {
   from {
-    transform: translateY(-6px);
+    transform: translateY(-4px);
     opacity: 0;
   }
   to {
@@ -74,152 +77,108 @@
   }
 }
 
+.row.filled {
+  background: var(--panel-hover);
+  opacity: 1;
+}
+
 .cell {
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex: none;
+  white-space: nowrap;
+  transition: color 300ms ease;
 }
 
 .block {
-  width: 94px;
-  color: var(--muted-2);
+  font-family: var(--font-mono), monospace;
+  color: var(--muted);
+  font-weight: 500;
 }
 
 .word {
-  width: 42px;
-  font-weight: 700;
+  font-family: var(--font-mono), monospace;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
-.conf {
-  width: 72px;
-  color: var(--muted-2);
+.kindBuy .word {
+  color: var(--buy-ink);
 }
 
+.kindSell .word {
+  color: var(--sell-ink);
+}
+
+.kindLate .word {
+  color: var(--late-ink);
+}
+
+.conf,
 .lat {
-  width: 42px;
-  color: var(--muted-2);
+  font-family: var(--font-mono), monospace;
+  color: var(--ink-2);
+  font-size: 10px;
+  font-weight: 500;
 }
 
 .detail {
-  flex: 1 1 auto;
-  min-width: 0;
+  color: var(--ink);
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+}
+
+.detail.muted {
+  color: var(--muted);
 }
 
 .tx {
-  flex: none;
   color: var(--link);
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  text-align: right;
 }
 
 .tx a {
-  color: var(--link);
-  text-decoration: none;
+  transition: opacity 150ms ease, color 300ms ease;
 }
 
-.pending {
+.tx a:hover {
+  opacity: 0.7;
+}
+
+.tx .pending {
+  color: var(--late);
   opacity: 0.6;
 }
 
-.muted {
+.tx .muted {
   color: var(--muted-2);
 }
 
-.empty {
-  height: 26px;
-  display: flex;
-  align-items: center;
-  padding: 0 18px;
-  font-family: var(--font-mono), "Geist Mono", monospace;
-  font-size: 11.5px;
-  color: var(--muted-2);
-}
-
-/* word + detail take the row's colour */
-.kindBuy .word,
-.kindBuy .detail {
-  color: var(--buy);
-}
-
-.kindSell .word,
-.kindSell .detail {
-  color: var(--sell);
-}
-
-.kindLate .word,
-.kindLate .detail {
-  color: var(--late);
-}
-
-.kindBuy .detail.muted,
-.kindSell .detail.muted,
-.kindLate .detail.muted {
-  color: var(--muted-2);
-}
-
-/* trade rows get a faint tint; the newest row a stronger one */
-.kindBuy {
-  background: rgba(15, 169, 104, 0.07);
-}
-
-.kindSell {
-  background: rgba(228, 87, 61, 0.07);
-}
-
-.kindLate {
-  background: transparent;
-}
-
-.newest.kindBuy {
-  background: rgba(15, 169, 104, 0.16);
-}
-
-.newest.kindSell {
-  background: rgba(228, 87, 61, 0.16);
-}
-
-.newest.kindLate {
-  background: rgba(0, 0, 0, 0.05);
-}
-
-/* Below 900px nothing constrains the column's height, so give the list a
-   definite one (15 rows) instead of letting it size to its own content. */
-@media (max-width: 899.98px) {
-  .list {
-    flex: none;
-    height: 390px;
-  }
-}
-
-/* narrow screens: drop conf so the row still fits on one line */
-@media (max-width: 390px) {
-  .conf {
-    display: none;
-  }
-
+@media (max-width: 900px) {
   .row {
+    grid-template-columns: 80px 44px 44px 48px 1fr 65px;
     gap: 8px;
-    padding-left: 12px;
-    padding-right: 12px;
+    padding: 0 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .row {
+    grid-template-columns: 75px 42px 1fr 60px;
+    gap: 6px;
+    padding: 0 10px;
+    font-size: 10px;
   }
 
-  .label {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-
-  .block {
-    width: 78px;
+  .conf,
+  .lat {
+    display: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .row {
+  .row.newest {
     animation: none;
-    transition: none;
   }
-}
-
-/* A block where a taker hit one of our resting orders: the detail is the fill, in full weight. */
-.filled .detail {
-  font-weight: 600;
 }
