@@ -1,0 +1,146 @@
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+  flex-shrink: 0;
+  overflow-x: auto;
+  transition: background-color 300ms ease, border-color 300ms ease;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pnlSection {
+  flex: 1;
+  min-width: 0;
+}
+
+.label {
+  font-size: 9px;
+  color: var(--label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: color 300ms ease;
+}
+
+.bankroll {
+  font-family: var(--font-mono), monospace;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink-2);
+  letter-spacing: -0.01em;
+  transition: color 300ms ease;
+}
+
+.arrow {
+  font-size: 20px;
+  color: var(--muted-2);
+  opacity: 0.5;
+  transition: color 300ms ease;
+}
+
+.equity {
+  font-family: var(--font-mono), monospace;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  transition: color 300ms ease;
+}
+
+.divider {
+  width: 1px;
+  height: 40px;
+  background: var(--border);
+  margin: 0 8px;
+  transition: background-color 300ms ease;
+}
+
+.pnl {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pnlUsd {
+  font-family: var(--font-mono), monospace;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: color 300ms ease;
+}
+
+.pnlPct {
+  font-family: var(--font-mono), monospace;
+  font-size: 16px;
+  font-weight: 600;
+  opacity: 0.8;
+  transition: color 300ms ease, opacity 300ms ease;
+}
+
+.positive {
+  color: var(--pnl-pos);
+}
+
+.negative {
+  color: var(--pnl-neg);
+}
+
+@media (max-width: 900px) {
+  .bar {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .equity {
+    font-size: 24px;
+  }
+
+  .pnlUsd {
+    font-size: 20px;
+  }
+
+  .pnlPct {
+    font-size: 14px;
+  }
+
+  .divider {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .bar {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .bankroll {
+    font-size: 16px;
+  }
+
+  .equity {
+    font-size: 22px;
+  }
+
+  .pnlUsd {
+    font-size: 18px;
+  }
+
+  .pnlPct {
+    font-size: 13px;
+  }
+
+  .arrow {
+    font-size: 16px;
+  }
+}

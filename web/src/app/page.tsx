@@ -1,6 +1,7 @@
 "use client";
 
 import DecisionPanel from "@/components/DecisionPanel/DecisionPanel";
+import EquityBar from "@/components/EquityBar/EquityBar";
 import Feed from "@/components/Feed/Feed";
 import FlowChart from "@/components/FlowChart/FlowChart";
 import Header from "@/components/Header/Header";
@@ -16,6 +17,7 @@ export default function Page() {
   return (
     <div className="card">
       <Header meta={feed.meta} latest={feed.latest} connection={feed.connection} />
+      <EquityBar latest={feed.latest} />
       <StatsRow latest={feed.latest} avgLatencyMs={feed.avgLatencyMs} meta={feed.meta} />
       <div className={styles.main}>
         <div className={styles.left}>
